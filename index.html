@@ -100,8 +100,13 @@
     </div>
 
     <div class="app-content">
+     
+     <div class="app-section">
+       <h4 style="color: #6b6767;"><b>All Saved Notes are Here</b></h4>
+     </div>
+
       <div class="app-section">
-        <ul id="all_notes">
+        <ul class="app-list" id="all_notes">
           
         </ul>
        
@@ -109,32 +114,80 @@
     </div>
      
    </div>
+
+
+
+
+<!-- READING INDIVIDUAL NOTE -->
+   <div class="app-page" data-page="read">
+    <div class="app-topbar">
+      <div class="app-title" style="background-color: #DD4539;"><b><i>Note</i></b></div>
+      <div class="app-button right" data-back>Back</div>
+    </div>
+
+    <div class="app-content">
+     
+     <div class="app-section" id="current_subject">
+       
+     </div>
+
+     <div class="app-section" id="current_note">
+      
+     </div>
+
+    </div> 
+   </div>
    
 
     <script src="zepto.js"></script>
     <script src="app.min.js"></script>
     <script>
       App.controller('home', function (page) {
-        
-       if(localStorage.getItem('count') == null){
-         localStorage.setItem('count' , 0) ;
-       }
+    
 
       });
 
-       App.controller('read', function (page) {
-       
-         var count = parseInt(localStorage.getItem('count'));
 
-        for(var i=0 ; i<count; i++){
 
-         var subject = localStorage.getItem('subject'+i);
-         $(page).find('#all_notes').append(`<li class="app-button redirect" id='subject${i}' style="text-align:center;"><b>${subject}</b></li>`) ;
+
+
+       App.controller('notes', function (page) {
+      
+        
+        if(JSON.parse(localStorage.getItem('subject')) !== null){
+
+           var subject = JSON.parse(localStorage.getItem('subject'));
+           
+      
+           if(localStorage.getItem('notes')!==null){
+            var notes = JSON.parse(localStorage.getItem('notes')) ;
+           }
+         
+            $.each(subject , function(index , value){
+             
+             $(page).find('#all_notes').append('<li class="app-button redirect" style="text-align:center;">'+ value +'</li>');
+
+           });
+
+             $(page).find('#all_notes').show();
+
+
+             $(page).find(".redirect").clickable().on('click' , function(){
+
+               localStorage.setItem('current_note' , $(this).index());
+
+               App.load('read');
+
+             });
+
+
 
         }
-
-
+  
       });
+
+
+
 
 
 
@@ -142,11 +195,23 @@
          
          $(page).find('#save_note').clickable().on('click' , function(){
 
-           var count = parseInt(localStorage.getItem('count'));
+           var subject = new Array();
+           var notes = new Array();
+
+           if(localStorage.getItem('subject') !== null){
+             subject = JSON.parse(localStorage.getItem('subject'));
+           }
+
+           if(localStorage.getItem('notes') !== null){
+             notes = JSON.parse(localStorage.getItem('notes'));
+           }
+
+           subject.push($('#subject').val());
+           notes.push($("#content").val());
             
-            localStorage.setItem('subject'+count , $("#subject").val());
-            localStorage.setItem('note'+count , $("#content").val());
-            localStorage.setItem('count' , count+1) ;
+            localStorage.setItem('subject', JSON.stringify(subject));
+            localStorage.setItem('notes' , JSON.stringify(notes));
+           
 
             App.load('home');
 
@@ -154,6 +219,20 @@
          });
 
       });
+
+
+
+        App.controller('read' , function(page){
+             
+             var current_subject = JSON.parse(localStorage.getItem('subject'));
+              var current_note = JSON.parse(localStorage.getItem('notes'));
+             var index = parseInt(localStorage.getItem('current_note'));
+             $(page).find('#current_subject').append(`<h3 style="text-align:center;"><b>${current_subject[index]}</b></h3>`) ;
+              $(page).find('#current_note').append(`<h5 style="color: #6b6767;"><b>${current_note[index]}</b></h5>`) ;
+
+      
+
+        });
 
     
 

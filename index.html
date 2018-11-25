@@ -55,8 +55,10 @@
         </div>
 
          <div class="app-section button_section">
-          <div class="app-button red" data-target="read"><b>My Notes</b></div>
+          <div class="app-button red" data-target="notes"><b>My Notes</b></div>
         </div>
+
+         <p style="text-align: center; color: #DDDDDD;">Design By Mohammad Anas</p>
 
       </div>
     </div>
@@ -80,10 +82,32 @@
       </div>
 
       <div class="app-section">
-        <div class="app-button green">Save</div>
+        <div class="app-button green" id="save_note">Save</div>
       </div>
+
        
      </div>
+   </div>
+
+
+
+
+   <!-- READING YOUR NOTES PAGE -->
+   <div class="app-page" data-page="notes">
+    <div class="app-topbar">
+      <div class="app-title" style="background-color: #DD4539;"><b><i>All Notes</i></b></div>
+      <div class="app-button right" data-back>Back</div>
+    </div>
+
+    <div class="app-content">
+      <div class="app-section">
+        <ul id="all_notes">
+          
+        </ul>
+       
+      </div>
+    </div>
+     
    </div>
    
 
@@ -91,15 +115,44 @@
     <script src="app.min.js"></script>
     <script>
       App.controller('home', function (page) {
-        // put stuff here
+        
+       if(localStorage.getItem('count') == null){
+         localStorage.setItem('count' , 0) ;
+       }
+
       });
 
        App.controller('read', function (page) {
-        // put stuff here
+       
+         var count = parseInt(localStorage.getItem('count'));
+
+        for(var i=0 ; i<count; i++){
+
+         var subject = localStorage.getItem('subject'+i);
+         $(page).find('#all_notes').append(`<li class="app-button redirect" id='subject${i}' style="text-align:center;"><b>${subject}</b></li>`) ;
+
+        }
+
+
       });
 
+
+
         App.controller('write', function (page) {
-        // put stuff here
+         
+         $(page).find('#save_note').clickable().on('click' , function(){
+
+           var count = parseInt(localStorage.getItem('count'));
+            
+            localStorage.setItem('subject'+count , $("#subject").val());
+            localStorage.setItem('note'+count , $("#content").val());
+            localStorage.setItem('count' , count+1) ;
+
+            App.load('home');
+
+
+         });
+
       });
 
     

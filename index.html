@@ -67,8 +67,8 @@
 
    <!-- WRITING NOTES PAGE -->
    <div class="app-page" data-page="write">
-    <div class="app-topbar">
-      <div class="app-title" style="background-color: #4486F0;"><b><i>Take Notes</i></b></div>
+    <div class="app-topbar" style="background-color: #4486F0;">
+      <div class="app-title"><b><i>Take Notes</i></b></div>
       <div class="app-button right" data-back ><b>Back</b></div>
     </div>
 
@@ -94,9 +94,9 @@
 
    <!-- READING YOUR NOTES PAGE -->
    <div class="app-page" data-page="notes">
-    <div class="app-topbar">
-      <div class="app-title" style="background-color: #DD4539;"><b><i>All Notes</i></b></div>
-      <div class="app-button right" data-back>Back</div>
+    <div class="app-topbar" style="background-color: #DD4539;">
+      <div class="app-title"><b><i>All Notes</i></b></div>
+      <div class="app-button right" data-target='home'>Back</div>
     </div>
 
     <div class="app-content">
@@ -120,20 +120,28 @@
 
 <!-- READING INDIVIDUAL NOTE -->
    <div class="app-page" data-page="read">
-    <div class="app-topbar">
-      <div class="app-title" style="background-color: #DD4539;"><b><i>Note</i></b></div>
+    <div class="app-topbar" style="background-color: #33CC77;">
+      <div class="app-title"><b><i>Note</i></b></div>
       <div class="app-button right" data-back>Back</div>
     </div>
 
     <div class="app-content">
      
      <div class="app-section" id="current_subject">
-       
+       <!-- DYNAMIC DATA-->
      </div>
 
      <div class="app-section" id="current_note">
-      
+       <!-- DYNAMIC DATA-->
      </div>
+       
+       <div class="app-section home_section">
+         <div class="app-button blue"><b>Edit</b></div>
+       </div>
+       
+       <div class="app-section home_section" style="margin-top: 0; ">  
+         <div class="app-button red" id="delete"><b>Delete</b></div>
+      </div>
 
     </div> 
    </div>
@@ -202,6 +210,20 @@
              subject = JSON.parse(localStorage.getItem('subject'));
            }
 
+           //EMPTY INPUT
+           if($('#subject').val() == ''){
+              App.dialog({
+              title        : 'Please Enter The Subject',
+              text         : 'Subject Form Can not be Empty',
+              okButton     : 'Try Again',
+              cancelButton : 'Back'
+            }, function (tryAgain) {
+              if (tryAgain) {
+                  App.load('write');
+              }
+            });
+           }
+
            if(localStorage.getItem('notes') !== null){
              notes = JSON.parse(localStorage.getItem('notes'));
            }
@@ -225,11 +247,22 @@
         App.controller('read' , function(page){
              
              var current_subject = JSON.parse(localStorage.getItem('subject'));
-              var current_note = JSON.parse(localStorage.getItem('notes'));
+             var current_note = JSON.parse(localStorage.getItem('notes'));
              var index = parseInt(localStorage.getItem('current_note'));
-             $(page).find('#current_subject').append(`<h3 style="text-align:center;"><b>${current_subject[index]}</b></h3>`) ;
-              $(page).find('#current_note').append(`<h5 style="color: #6b6767;"><b>${current_note[index]}</b></h5>`) ;
 
+             $(page).find('#current_subject').append(`<h2 style="text-align:center;"><b><i>${current_subject[index]}</i></b></h2>`) ;
+             $(page).find('#current_note').append(`<h4><b><i>${current_note[index]}</i></b></h4>`) ;
+
+             $(page).find("#delete").clickable().on('click' , function(){
+                      
+                      current_subject.splice(index , 1);
+                      current_note.splice(index , 1);
+                      localStorage.setItem('notes' , JSON.stringify(current_note));
+                      localStorage.setItem('subject' , JSON.stringify(current_subject));
+
+                      App.load('notes');
+
+             });
       
 
         });

@@ -248,10 +248,11 @@
                var subject = new Array();
                var notes = new Array();
                var date = new Array();
+               var time = new Array();
 
                var d = new Date();
                var today_date = d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear();
-
+               var today_time = d.getHours()+" : "+d.getMinutes();
 
                if(localStorage.getItem('subject') !== null){
                  subject = JSON.parse(localStorage.getItem('subject'));
@@ -266,13 +267,19 @@
                 date = JSON.parse(localStorage.getItem('date'));
                }
 
+               if(localStorage.getItem('time') !== null){
+                time = JSON.parse(localStorage.getItem('time'));
+               }
+
                subject.push($('#subject').val());
                notes.push($("#content").val());
                date.push(today_date);
+               time.push(today_time);
                 
                 localStorage.setItem('subject', JSON.stringify(subject));
                 localStorage.setItem('notes' , JSON.stringify(notes));
                 localStorage.setItem('date' , JSON.stringify(date));
+                localStorage.setItem('time' , JSON.stringify(time));
              
          }
 
@@ -289,19 +296,22 @@
              var current_subject = JSON.parse(localStorage.getItem('subject'));
              var current_note = JSON.parse(localStorage.getItem('notes'));
              var current_date = JSON.parse(localStorage.getItem('date'));
+             var current_time = JSON.parse(localStorage.getItem('time'));
              var index = parseInt(localStorage.getItem('current_note'));
 
              $(page).find('#current_subject').append(`<h2 style="text-align:center; color:#3e4240;"><b><i>${current_subject[index]}</i></b></h2>`) ;
-             $(page).find('#current_note').append(`<p style="color:#3e4240;">${current_date[index]}</p><br><h3 style="color:#3e4240;"><b><i>${current_note[index]}</i></b></h3>`) ;
+             $(page).find('#current_note').append(`<p style="color:#3e4240;">${current_date[index]}<span style="float:right;">${current_time[index]}</span></p><br><h3 style="color:#3e4240;"><b><i>${current_note[index]}</i></b></h3>`) ;
 
              $(page).find("#delete").clickable().on('click' , function(){
                       
                       current_subject.splice(index , 1);
                       current_note.splice(index , 1);
                       current_date.splice(index , 1);
+                      current_time.splice(index , 1);
                       localStorage.setItem('notes' , JSON.stringify(current_note));
                       localStorage.setItem('subject' , JSON.stringify(current_subject));
                       localStorage.setItem('date' , JSON.stringify(current_date));
+                      localStorage.setItem('time' , JSON.stringify(current_time));
 
                       App.load('notes');
 
@@ -319,6 +329,8 @@
         
              var current_subject = JSON.parse(localStorage.getItem('subject'));
              var current_note = JSON.parse(localStorage.getItem('notes'));
+             var current_date = JSON.parse(localStorage.getItem('date'));
+             var current_time = JSON.parse(localStorage.getItem('time'));
              var index = parseInt(localStorage.getItem('current_note'));
               
              $(page).find('#edit_subject').val(current_subject[index]);
@@ -345,12 +357,23 @@
                       //FIRST DELETE THE NOTE
                       current_subject.splice(index , 1);
                       current_note.splice(index , 1);
+                      current_date.splice(index , 1);
+                      current_time.splice(index , 1);
+
                       localStorage.setItem('notes' , JSON.stringify(current_note));
                       localStorage.setItem('subject' , JSON.stringify(current_subject));
+                      localStorage.setItem('date' , JSON.stringify(current_date));
+                      localStorage.setItem('time' , JSON.stringify(current_time));
 
                       //ADDING NEW VALUES
                        var subject = new Array();
                        var notes = new Array();
+                       var date = new Array();
+                       var time = new Array();
+
+                        var d = new Date();
+                         var today_date = d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear();
+                         var today_time = d.getHours()+" : "+d.getMinutes();
 
                        if(localStorage.getItem('subject') !== null){
                          subject = JSON.parse(localStorage.getItem('subject'));
@@ -361,11 +384,25 @@
                          notes = JSON.parse(localStorage.getItem('notes'));
                        }
 
+                       if(localStorage.getItem('time') !== null){
+                         time = JSON.parse(localStorage.getItem('time'));
+                       }
+
+
+                       if(localStorage.getItem('date') !== null){
+                         date = JSON.parse(localStorage.getItem('date'));
+                       }
+
+
                        subject.push($('#edit_subject').val());
                        notes.push($("#edit_content").val());
+                       date.push(today_date);
+                       time.push(today_time);
                         
                         localStorage.setItem('subject', JSON.stringify(subject));
                         localStorage.setItem('notes' , JSON.stringify(notes));
+                        localStorage.setItem('date', JSON.stringify(date));
+                        localStorage.setItem('time' , JSON.stringify(time));
 
                    }
 

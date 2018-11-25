@@ -3,7 +3,7 @@
   <name>NoteBook</name>
   <description>Now Save your Notes Easily</description>
   <author email="anas.1633.m@gmail.com" href="http://https://github.com/anasM0hammad/NoteBook">Mohammad Anas</author>
-  <preference name="phonegap-version" value="cli-6.3.0" />
+  <preference name="phonegap-version" value="cli-6.5.0" />
   <preference name="permissions" value="none" />
   <preference name="orientation" value="portrait" />
   <preference name="target-device" value="universal" />

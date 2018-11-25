@@ -66,11 +66,23 @@
    <!-- WRITING NOTES PAGE -->
    <div class="app-page" data-page="write">
     <div class="app-topbar">
-      <div class="app-title"><b><i>Take Notes</i></b></div>
+      <div class="app-title" style="background-color: #4486F0;"><b><i>Take Notes</i></b></div>
+      <div class="app-button right" data-back ><b>Back</b></div>
     </div>
 
      <div class="app-content">
-       <h1>Start Writing</h1>
+      <div class="app-section">
+         <input class="app-input" type="text" id="subject" placeholder="Subject">
+      </div>
+
+      <div class="app-section">
+        <textarea class="app-input" id="content" placeholder="Your Note"></textarea>
+      </div>
+
+      <div class="app-section">
+        <div class="app-button green">Save</div>
+      </div>
+       
      </div>
    </div>
    

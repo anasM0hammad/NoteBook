@@ -146,7 +146,7 @@
 <!-- READING INDIVIDUAL NOTE -->
    <div class="app-page" data-page="read">
     <div class="app-topbar" style="background-color: #33CC77;">
-      <div class="app-title"><b><i>Note</i></b></div>
+      <div class="app-title"><b><i>My Note</i></b></div>
       <div class="app-button right" data-back>Back</div>
     </div>
 
@@ -247,6 +247,11 @@
 
                var subject = new Array();
                var notes = new Array();
+               var date = new Array();
+
+               var d = new Date();
+               var today_date = d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear();
+
 
                if(localStorage.getItem('subject') !== null){
                  subject = JSON.parse(localStorage.getItem('subject'));
@@ -257,11 +262,17 @@
                  notes = JSON.parse(localStorage.getItem('notes'));
                }
 
+               if(localStorage.getItem('date') !== null){
+                date = JSON.parse(localStorage.getItem('date'));
+               }
+
                subject.push($('#subject').val());
                notes.push($("#content").val());
+               date.push(today_date);
                 
                 localStorage.setItem('subject', JSON.stringify(subject));
                 localStorage.setItem('notes' , JSON.stringify(notes));
+                localStorage.setItem('date' , JSON.stringify(date));
              
          }
 
@@ -277,17 +288,20 @@
              
              var current_subject = JSON.parse(localStorage.getItem('subject'));
              var current_note = JSON.parse(localStorage.getItem('notes'));
+             var current_date = JSON.parse(localStorage.getItem('date'));
              var index = parseInt(localStorage.getItem('current_note'));
 
              $(page).find('#current_subject').append(`<h2 style="text-align:center; color:#3e4240;"><b><i>${current_subject[index]}</i></b></h2>`) ;
-             $(page).find('#current_note').append(`<h4 style="color:#3e4240;"><b><i>${current_note[index]}</i></b></h4>`) ;
+             $(page).find('#current_note').append(`<p style="color:#3e4240;">${current_date[index]}</p><br><h3 style="color:#3e4240;"><b><i>${current_note[index]}</i></b></h3>`) ;
 
              $(page).find("#delete").clickable().on('click' , function(){
                       
                       current_subject.splice(index , 1);
                       current_note.splice(index , 1);
+                      current_date.splice(index , 1);
                       localStorage.setItem('notes' , JSON.stringify(current_note));
                       localStorage.setItem('subject' , JSON.stringify(current_subject));
+                      localStorage.setItem('date' , JSON.stringify(current_date));
 
                       App.load('notes');
 

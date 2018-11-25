@@ -5,31 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
     <link rel="stylesheet" href="app.min.css">
     <style>
-      /* TODO */
+
+      .home_page{
+          background-image: url('background.jpg');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+      }
+
+      .home_section{
+        padding: 0;
+        margin-top: 70px;
+        text-align: center;
+      }
+
+      .button_section{
+         padding: 0;
+        text-align: center;
+      }
+
+      .home_page h1{
+        color: white;
+        text-align: center;
+        font-family: verdana;
+        text-decoration: underline;
+      }
+
+      .home_page img{
+        margin: auto;
+        display: block;
+      }
+
     </style>
   </head>
 
   <body>
+
+    <!-- MAIN HOME PAGE -->
     <div class="app-page" data-page="home">
-      <div class="app-topbar">
-        <div class="app-title">Home page</div>
-      </div>
-      <div class="app-content">
-        <div class="app-section">
-          <div class="app-button" data-target="page2">Go to Page 2</div>
+
+      <div class="app-content home_page"  >
+
+        <img src="logo.png" width="120" height="130">
+        <h1><b><i>NOTEBOOK</i></b></h1>
+         
+
+        <div class="app-section home_section">
+          <div class="app-button blue" data-target="write"><b>Start Writing</b></div>
         </div>
+
+         <div class="app-section button_section">
+          <div class="app-button red" data-target="read"><b>My Notes</b></div>
+        </div>
+
       </div>
     </div>
 
-    <div class="app-page" data-page="page2">
-      <div class="app-topbar">
-        <div class="app-button left" data-back data-autotitle></div>
-        <div class="app-title">Page 2</div>
-      </div>
-      <div class="app-content">
-        Page 2 is lonely
-      </div>
+
+
+   <!-- WRITING NOTES PAGE -->
+   <div class="app-page" data-page="write">
+    <div class="app-topbar">
+      <div class="app-title"><b><i>Take Notes</i></b></div>
     </div>
+
+     <div class="app-content">
+       <h1>Start Writing</h1>
+     </div>
+   </div>
+   
 
     <script src="zepto.js"></script>
     <script src="app.min.js"></script>
@@ -38,9 +82,15 @@
         // put stuff here
       });
 
-      App.controller('page2', function (page) {
+       App.controller('read', function (page) {
         // put stuff here
       });
+
+        App.controller('write', function (page) {
+        // put stuff here
+      });
+
+    
 
       try {
         App.restore();

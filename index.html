@@ -4,9 +4,38 @@
     <title>My App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
     <link rel="stylesheet" href="app.min.css">
-    <link rel="stylesheet"  href="app.css">
+    
     <style>
+      .home_page{
+          background-image: url('background.jpg');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+      }
 
+      .home_section{
+        padding: 0;
+        margin-top: 70px;
+        text-align: center;
+      }
+
+      .button_section{
+         padding: 0;
+        text-align: center;
+      }
+
+      .home_page h1{
+        color: white;
+        text-align: center;
+        font-family: verdana;
+        text-decoration: underline;
+      }
+
+      .home_page img{
+        margin: auto;
+        display: block;
+        margin-top: 30px;
+      }
     </style>
   </head>
 
@@ -17,8 +46,8 @@
 
       <div class="app-content home_page"  >
 
-        <img src="logo.png" width="90" height="115">
-        <h1><b><i>NOTEBOOK</i></b></h1>
+        <img src="logo.png" width="90" height="115" id="logo">
+        <h1 style="color: #545174;"><b><i>NOTEBOOK</i></b></h1>
          
 
         <div class="app-section home_section">
@@ -26,7 +55,7 @@
         </div>
 
          <div class="app-section button_section">
-          <div class="app-button red" data-target="notes"><b>My Notes</b></div>
+          <div class="app-button red" id="my_notes"><b>My Notes</b></div>
         </div>
 
          <p style="text-align: center; color: #DDDDDD;">Design By Mohammad Anas</p>
@@ -141,10 +170,428 @@
 
     </div> 
    </div>
+
+
+
+
+
+   <!-- PASSWORD PAGE-->
+    <div class="app-page" data-page="password">
+    <div class="app-topbar" style="background-color: #33CC77;">
+      <div class="app-title"><b><i>Settings</i></b></div>
+      <div class="app-button right" data-back>Back</div>
+    </div>
+
+    <div class="app-content">
+      <div class="app-section">
+         <input class="app-input" type="password" id="set_password" placeholder="Enter Password">
+      </div>
+       <div class="app-section">
+         <input class="app-input" type="password" id="confirm_password" placeholder="Confirm Password">
+      </div>
+
+      <div class="app-section">
+          <div class="app-button red" id="save_password"><b>Save Password</b></div>
+      </div>
+
+      <div class="app-section">
+        <div class="app-button blue" id="remove_password"><b>Remove Password</b></div>
+      </div>
+        
+          
+       
+
+    </div> 
+   </div>
+
+
    
 
     <script src="zepto.js"></script>
     <script src="app.min.js"></script>
-    <script src="app.js" type="javascript/text"></script>
+    <script>
+       App.controller('home', function (page) {
+
+        $(page).find("#logo").clickable().on("click", function(){
+          
+           if(JSON.parse(localStorage.getItem("password")) == null){
+             App.load("password"); 
+           }
+
+           else{
+            var enter_password = prompt("Enter the Password");
+
+            if(enter_password == JSON.parse(localStorage.getItem("password"))){
+              App.load("password");
+            }
+            else{
+
+               App.dialog({
+                      title        : 'Wrong Password',
+                      text         : 'You Entered Wrong Password',
+                      okButton     : 'Try Again',
+                      cancelButton : 'Back'
+                    }, function (tryAgain) {
+                      if (tryAgain) {
+                          App.load('home');
+                      }
+                    });
+
+            }
+           }
+
+           
+
+        });
+
+
+        $(page).find("#my_notes").clickable().on("click", function(){
+
+            if(JSON.parse(localStorage.getItem("password")) == null)
+              {
+                 App.load("notes");
+              }
+
+
+            else{  
+            
+             var enter_password = prompt("Enter the Password");
+
+             if(enter_password == JSON.parse(localStorage.getItem("password"))){
+                App.load("notes");
+             }
+
+             else{
+               App.dialog({
+                      title        : 'Wrong Password',
+                      text         : 'You Entered Wrong Password',
+                      okButton     : 'Try Again',
+                      cancelButton : 'Back'
+                    }, function (tryAgain) {
+                      if (tryAgain) {
+                          App.load('home');
+                      }
+                    });
+
+             }
+
+           }  
+          
+          
+          });
+    
+
+      });
+
+
+
+
+        App.controller('password', function (page) {
+
+
+          $(page).find("#save_password").clickable().on("click" , function(){
+
+
+          var password = $(page).find("#set_password").val();
+          var confirm_password = $(page).find("#confirm_password").val();
+
+
+              if(password == "" || confirm_password == ""){
+                 App.dialog({
+                      title        : 'Please Enter Required Fields',
+                      text         : 'Both Fields are Required',
+                      okButton     : 'Try Again',
+                      cancelButton : 'Back'
+                    }, function (tryAgain) {
+                      if (tryAgain) {
+                          App.load('password');
+                      }
+                    });
+              }
+
+
+              if(password !== confirm_password){
+                App.dialog({
+                     
+                     title        :  'Enter Same Password',
+                     text         :  'Password not Match',
+                     okButton     :  'Try Again',
+                     cancelButton :  'Back'
+                    }, function(tryAgain){
+                      if(tryAgain){
+                        App.load('password');
+                      }
+                });
+              }
+
+              
+              if(password == confirm_password){
+                localStorage.setItem("password" , JSON.stringify(password));
+                App.load("home");
+              }
+
+
+          });
+
+
+          $(page).find("#remove_password").clickable().on("click" , function(){
+         
+            localStorage.setItem("password" , null);
+            App.load('home');
+
+
+          });
+
+
+
+
+             
+
+
+      });
+
+
+
+
+
+       App.controller('notes', function (page) {
+      
+        
+        if(JSON.parse(localStorage.getItem('subject')) !== null){
+
+           var subject = JSON.parse(localStorage.getItem('subject'));
+           
+      
+           if(localStorage.getItem('notes')!==null){
+            var notes = JSON.parse(localStorage.getItem('notes')) ;
+           }
+         
+            $.each(subject , function(index , value){
+             
+             $(page).find('#all_notes').append('<li class="app-button redirect" style="text-align:center;">'+ value +'</li>');
+
+           });
+
+             $(page).find('#all_notes').show();
+
+
+             $(page).find(".redirect").clickable().on('click' , function(){
+
+               localStorage.setItem('current_note' , $(this).index());
+
+               App.load('read');
+
+             });
+
+
+
+        }
+  
+      });
+
+
+
+
+
+
+        App.controller('write', function (page) {
+         
+         $(page).find('#save_note').clickable().on('click' , function(){
+
+           //EMPTY INPUT
+           if($('#subject').val() == ''){
+                  App.dialog({
+                  title        : 'Please Enter The Subject',
+                  text         : 'Subject Form Can not be Empty',
+                  okButton     : 'Try Again',
+                  cancelButton : 'Back'
+                }, function (tryAgain) {
+                  if (tryAgain) {
+                      App.load('write');
+                  }
+                });
+               }
+
+           else{
+
+
+               var subject = new Array();
+               var notes = new Array();
+               var date = new Array();
+               var time = new Array();
+
+               var d = new Date();
+               var today_date = d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear();
+               var today_time = d.getHours()+" : "+d.getMinutes();
+
+               if(localStorage.getItem('subject') !== null){
+                 subject = JSON.parse(localStorage.getItem('subject'));
+               }
+
+
+               if(localStorage.getItem('notes') !== null){
+                 notes = JSON.parse(localStorage.getItem('notes'));
+               }
+
+               if(localStorage.getItem('date') !== null){
+                date = JSON.parse(localStorage.getItem('date'));
+               }
+
+               if(localStorage.getItem('time') !== null){
+                time = JSON.parse(localStorage.getItem('time'));
+               }
+
+               subject.push($('#subject').val());
+               notes.push($("#content").val());
+               date.push(today_date);
+               time.push(today_time);
+                
+                localStorage.setItem('subject', JSON.stringify(subject));
+                localStorage.setItem('notes' , JSON.stringify(notes));
+                localStorage.setItem('date' , JSON.stringify(date));
+                localStorage.setItem('time' , JSON.stringify(time));
+             
+         }
+
+          App.load('home');
+     
+         });
+
+      });
+
+
+
+        App.controller('read' , function(page){
+             
+             var current_subject = JSON.parse(localStorage.getItem('subject'));
+             var current_note = JSON.parse(localStorage.getItem('notes'));
+             var current_date = JSON.parse(localStorage.getItem('date'));
+             var current_time = JSON.parse(localStorage.getItem('time'));
+             var index = parseInt(localStorage.getItem('current_note'));
+
+             $(page).find('#current_subject').append(`<h2 style="text-align:center; color:#3e4240;"><b><i>${current_subject[index]}</i></b></h2>`) ;
+             $(page).find('#current_note').append(`<p style="color:#3e4240;">${current_date[index]}<span style="float:right;">${current_time[index]}</span></p><br><h3 style="color:#3e4240;"><b><i>${current_note[index]}</i></b></h3>`) ;
+
+             $(page).find("#delete").clickable().on('click' , function(){
+                      
+                      current_subject.splice(index , 1);
+                      current_note.splice(index , 1);
+                      current_date.splice(index , 1);
+                      current_time.splice(index , 1);
+                      localStorage.setItem('notes' , JSON.stringify(current_note));
+                      localStorage.setItem('subject' , JSON.stringify(current_subject));
+                      localStorage.setItem('date' , JSON.stringify(current_date));
+                      localStorage.setItem('time' , JSON.stringify(current_time));
+
+                      App.load('notes');
+
+             });
+      
+
+        });
+
+
+
+
+
+
+        App.controller('edit' , function(page){
+        
+             var current_subject = JSON.parse(localStorage.getItem('subject'));
+             var current_note = JSON.parse(localStorage.getItem('notes'));
+             var current_date = JSON.parse(localStorage.getItem('date'));
+             var current_time = JSON.parse(localStorage.getItem('time'));
+             var index = parseInt(localStorage.getItem('current_note'));
+              
+             $(page).find('#edit_subject').val(current_subject[index]);
+             $(page).find('#edit_content').val(current_note[index]);
+
+             $(page).find('#edit_note').clickable().on('click' , function(){
+                
+                  //EMPTY INPUT
+                 if($('#edit_subject').val() == ''){
+                        App.dialog({
+                        title        : 'Please Enter The Subject',
+                        text         : 'Subject Form Can not be Empty',
+                        okButton     : 'Try Again',
+                        cancelButton : 'Back'
+                      }, function (tryAgain) {
+                        if (tryAgain) {
+                            App.load('edit');
+                        }
+                      });
+                     }
+
+                   else{
+                   
+                      //FIRST DELETE THE NOTE
+                      current_subject.splice(index , 1);
+                      current_note.splice(index , 1);
+                      current_date.splice(index , 1);
+                      current_time.splice(index , 1);
+
+                      localStorage.setItem('notes' , JSON.stringify(current_note));
+                      localStorage.setItem('subject' , JSON.stringify(current_subject));
+                      localStorage.setItem('date' , JSON.stringify(current_date));
+                      localStorage.setItem('time' , JSON.stringify(current_time));
+
+                      //ADDING NEW VALUES
+                       var subject = new Array();
+                       var notes = new Array();
+                       var date = new Array();
+                       var time = new Array();
+
+                        var d = new Date();
+                         var today_date = d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear();
+                         var today_time = d.getHours()+" : "+d.getMinutes();
+
+                       if(localStorage.getItem('subject') !== null){
+                         subject = JSON.parse(localStorage.getItem('subject'));
+                       }
+
+
+                       if(localStorage.getItem('notes') !== null){
+                         notes = JSON.parse(localStorage.getItem('notes'));
+                       }
+
+                       if(localStorage.getItem('time') !== null){
+                         time = JSON.parse(localStorage.getItem('time'));
+                       }
+
+
+                       if(localStorage.getItem('date') !== null){
+                         date = JSON.parse(localStorage.getItem('date'));
+                       }
+
+
+                       subject.push($('#edit_subject').val());
+                       notes.push($("#edit_content").val());
+                       date.push(today_date);
+                       time.push(today_time);
+                        
+                        localStorage.setItem('subject', JSON.stringify(subject));
+                        localStorage.setItem('notes' , JSON.stringify(notes));
+                        localStorage.setItem('date', JSON.stringify(date));
+                        localStorage.setItem('time' , JSON.stringify(time));
+
+                   }
+
+
+                   App.load('notes');  
+
+
+             });
+
+        });
+
+    
+
+
+      try {
+        App.restore();
+      } catch (err) {
+        App.load('home');
+      }
+    </script>
   </body>
 </html>

@@ -1,5 +1,140 @@
  App.controller('home', function (page) {
+
+        $(page).find("#logo").clickable().on("click", function(){
+          
+           if(JSON.parse(localStorage.getItem("password")) == null){
+             App.load("password"); 
+           }
+
+           else{
+            var enter_password = prompt("Enter the Password");
+
+            if(enter_password == JSON.parse(localStorage.getItem("password"))){
+              App.load("password");
+            }
+            else{
+
+               App.dialog({
+                      title        : 'Wrong Password',
+                      text         : 'You Entered Wrong Password',
+                      okButton     : 'Try Again',
+                      cancelButton : 'Back'
+                    }, function (tryAgain) {
+                      if (tryAgain) {
+                          App.load('home');
+                      }
+                    });
+
+            }
+           }
+
+           
+
+        });
+
+
+        $(page).find("#my_notes").clickable().on("click", function(){
+
+            if(JSON.parse(localStorage.getItem("password")) == null)
+              {
+                 App.load("notes");
+              }
+
+
+            else{  
+            
+             var enter_password = prompt("Enter the Password");
+
+             if(enter_password == JSON.parse(localStorage.getItem("password"))){
+                App.load("notes");
+             }
+
+             else{
+               App.dialog({
+                      title        : 'Wrong Password',
+                      text         : 'You Entered Wrong Password',
+                      okButton     : 'Try Again',
+                      cancelButton : 'Back'
+                    }, function (tryAgain) {
+                      if (tryAgain) {
+                          App.load('home');
+                      }
+                    });
+
+             }
+
+           }  
+          
+          
+          });
     
+
+      });
+
+
+
+
+        App.controller('password', function (page) {
+
+
+          $(page).find("#save_password").clickable().on("click" , function(){
+
+
+          var password = $(page).find("#set_password").val();
+          var confirm_password = $(page).find("#confirm_password").val();
+
+
+              if(password == "" || confirm_password == ""){
+                 App.dialog({
+                      title        : 'Please Enter Required Fields',
+                      text         : 'Both Fields are Required',
+                      okButton     : 'Try Again',
+                      cancelButton : 'Back'
+                    }, function (tryAgain) {
+                      if (tryAgain) {
+                          App.load('password');
+                      }
+                    });
+              }
+
+
+              if(password !== confirm_password){
+                App.dialog({
+                     
+                     title        :  'Enter Same Password',
+                     text         :  'Password not Match',
+                     okButton     :  'Try Again',
+                     cancelButton :  'Back'
+                    }, function(tryAgain){
+                      if(tryAgain){
+                        App.load('password');
+                      }
+                });
+              }
+
+              
+              if(password == confirm_password){
+                localStorage.setItem("password" , JSON.stringify(password));
+                App.load("home");
+              }
+
+
+          });
+
+
+          $(page).find("#remove_password").clickable().on("click" , function(){
+         
+            localStorage.setItem("password" , null);
+            App.load('home');
+
+
+          });
+
+
+
+
+             
+
 
       });
 
